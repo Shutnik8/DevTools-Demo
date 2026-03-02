@@ -1,5 +1,6 @@
 
 # DevTools Demo — учебный сайт для SEO и разработчиков
+[DevTools Demo](https://shutnik8.github.io/DevTools-Demo/)
 
 Небольшой демо‑проект: одна HTML‑страница с намеренно допущенными ошибками и спорными решениями, чтобы тренироваться работать с DevTools в браузере (Console, Elements, Network) и делать обучающие скриншоты.
 

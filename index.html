@@ -1,0 +1,415 @@
+ 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Пример сайта для DevTools</title>
+  <meta name="description" content="Демо-сайт для демонстрации DevTools: ошибки JavaScript, лишние скрипты, мета-теги и проверка canonical/robots." />
+  <!-- Специально неправильный canonical -->
+  <link rel="canonical" href="https://example.com/wrong-page" />
+  <!-- Специально конфликтный robots -->
+  <meta name="robots" content="noindex,nofollow" />
+  <style>
+    :root {
+      --bg: #050814;
+      --bg-elevated: #101526;
+      --bg-card: #151a30;
+      --border-subtle: rgba(255,255,255,0.05);
+      --accent: #4f8dfd;
+      --accent-soft: rgba(79,141,253,0.12);
+      --accent-2: #22c55e;
+      --text-main: #f5f5f5;
+      --text-muted: #9ca3af;
+      --text-soft: #6b7280;
+      --danger: #f97373;
+      --danger-soft: rgba(248,113,113,0.12);
+      --code-bg: #0b1020;
+      --badge-dev: #4169e1;
+      --badge-seo: #16a34a;
+      --badge-bug: #dc2626;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #1f2937 0, #050814 45%, #020617 100%);
+      color: var(--text-main);
+    }
+
+    header {
+      padding: 18px 24px;
+      background: linear-gradient(to right, #050814, #111827);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .logo-sub {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-soft);
+      margin-top: 2px;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      font-size: 13px;
+      text-decoration: none;
+      margin-left: 16px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+    }
+
+    nav a:hover {
+      border-color: var(--border-subtle);
+      background: rgba(15,23,42,0.7);
+      color: var(--text-main);
+    }
+
+    main {
+      padding: 32px 20px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin: 0 0 8px;
+      color: #facc15;
+    }
+
+    .subtitle {
+      margin: 0 0 24px;
+      color: var(--text-muted);
+      font-size: 14px;
+      max-width: 640px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(220px, 1.4fr);
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #1d2538 0, #151a30 40%, #111827 100%);
+      padding: 18px 18px 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.8),
+        0 18px 45px rgba(0,0,0,0.55);
+    }
+
+    .card h2 {
+      font-size: 17px;
+      margin: 10px 0 8px;
+      color: var(--text-main);
+    }
+
+    .card p {
+      margin: 0 0 10px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .card ul {
+      margin: 4px 0 0 18px;
+      padding: 0;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .card ul li + li {
+      margin-top: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      margin-right: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+      border: 1px solid rgba(15,23,42,0.8);
+    }
+
+    .badge-dev {
+      background: var(--badge-dev);
+      color: #e5f0ff;
+    }
+
+    .badge-seo {
+      background: var(--badge-seo);
+      color: #e9ffef;
+    }
+
+    .badge-bug {
+      background: var(--badge-bug);
+      color: #fee2e2;
+    }
+
+    code {
+      background: var(--code-bg);
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      color: #e5e7eb;
+      border: 1px solid rgba(148,163,184,0.25);
+    }
+
+    pre {
+      background: var(--code-bg);
+      padding: 12px;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.5;
+      border: 1px solid rgba(148,163,184,0.3);
+      box-shadow: 0 18px 40px rgba(15,23,42,0.9);
+    }
+
+    pre code {
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .donate-card {
+      background: rgba(15,23,42,0.95);
+      border-radius: 12px;
+      padding: 18px 16px 16px;
+      box-shadow:
+        0 0 0 1px rgba(31,41,55,0.9),
+        0 18px 45px rgba(0,0,0,0.8);
+    }
+
+    .donate-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0 0 4px;
+      color: var(--text-main);
+    }
+
+    .donate-text {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin: 0 0 12px;
+    }
+
+    .donate-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+      color: #f9fafb;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      box-shadow:
+        0 12px 30px rgba(59,130,246,0.35),
+        0 0 0 1px rgba(15,23,42,0.9);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    }
+
+    .donate-button span {
+      margin-left: 6px;
+      font-size: 12px;
+      color: #e5e7eb;
+      opacity: 0.9;
+    }
+
+    .donate-button:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 16px 40px rgba(37,99,235,0.45),
+        0 0 0 1px rgba(15,23,42,0.9);
+      background: linear-gradient(135deg, #4338ca, #0284c7);
+      text-decoration: none;
+    }
+
+    .donate-note {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    footer {
+      padding: 16px 20px 22px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-soft);
+      border-top: 1px solid var(--border-subtle);
+      margin-top: 24px;
+      background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+    }
+
+    footer span {
+      opacity: 0.9;
+    }
+  </style>
+  <!-- Специально лишний тяжёлый скрипт (фейковый) -->
+  <script src="https://cdn.example.com/heavy-analytics.js"></script>
+  <!-- Скрипт, который бросает ошибку -->
+  <script>
+    // Специальная ошибка для вкладки Console
+    console.log('Инициализация демо-сайта для DevTools');
+    nonExistingFunction('boom');
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      DevTools Demo
+      <span class="logo-sub">Учебная страница для SEO и разработчиков</span>
+    </div>
+    <nav>
+      <a href="#">Блог</a>
+      <a href="#">Инструменты</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Демо-сайт для тренировки DevTools</h1>
+    <p class="subtitle">
+      Страница содержит намеренные ошибки и спорные решения, чтобы SEO-специалист и разработчик могли потренироваться искать проблемы в коде и DevTools.
+    </p>
+
+    <div class="layout">
+      <section>
+        <div class="card">
+          <span class="badge badge-dev">Dev</span>
+          <span class="badge badge-bug">Bug</span>
+          <h2>1. Ошибка JavaScript в консоли</h2>
+          <p>
+            Открой DevTools (<code>F12</code>) и перейди на вкладку <strong>Console</strong>, затем обнови страницу.
+            В консоли появится красная ошибка <code>nonExistingFunction is not defined</code>.
+          </p>
+          <p>
+            Это пример того, как одна некорректная функция может ломать важный функционал или подгрузку контента.
+          </p>
+        </div>
+
+        <div class="card">
+          <span class="badge badge-seo">SEO</span>
+          <h2>2. Подозрительные мета‑теги</h2>
+          <p>
+            Посмотри исходный код страницы (<code>Ctrl+U</code>) или вкладку <strong>Elements</strong> в DevTools:
+          </p>
+          <ul>
+            <li>
+              Мета‑тег <code>robots</code> со значением <code>noindex,nofollow</code> — поисковик не будет индексировать страницу.
+            </li>
+            <li>
+              Канонический URL указывает на другую страницу: <code>https://example.com/wrong-page</code>.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <span class="badge badge-seo">SEO</span>
+          <span class="badge badge-dev">Dev</span>
+          <h2>3. Лишние скрипты и ресурсы</h2>
+          <p>
+            Открой вкладку <strong>Network</strong> в DevTools и обнови страницу:
+          </p>
+          <ul>
+            <li>
+              Обрати внимание, что загружается внешний скрипт <code>heavy-analytics.js</code>.
+            </li>
+            <li>
+              Посмотри общее количество запросов и размер загружаемых ресурсов.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <span class="badge badge-dev">Dev</span>
+          <h2>4. Мини‑код для проверки meta и canonical</h2>
+          <p>
+            Во вкладке <strong>Console</strong> попробуй выполнить такой код:
+          </p>
+          <pre><code>const robots = document.querySelector('meta[name="robots"]');
+const canonical = document.querySelector('link[rel="canonical"]');
+
+console.log('robots:', robots && robots.content);
+console.log('canonical:', canonical && canonical.href);</code></pre>
+          <p>
+            Так SEO‑специалист может быстро проверить важные теги без сторонних сервисов.
+          </p>
+        </div>
+      </section>
+
+      <aside>
+        <div class="donate-card">
+          <h3 class="donate-title">Поддержать разработчика</h3>
+          <p class="donate-text">
+            Если этот демо‑проект и материалы по DevTools оказались полезны, вы можете поддержать дальнейшую разработку и новые обучающие примеры.
+          </p>
+          <a
+            class="donate-button"
+            href="https://yoomoney.ru/to/4100117099095471"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Поддержать проект
+            <span>через YooMoney</span>
+          </a>
+          <p class="donate-note">
+            Любая сумма — это вклад в новые демо‑проекты, шпаргалки и инструменты для SEO‑специалистов и разработчиков.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <span>Демо‑сайт для обучающих скриншотов DevTools. Не использовать в проде.</span>
+  </footer>
+</body>
+</html>

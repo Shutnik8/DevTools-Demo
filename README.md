@@ -1,4 +1,4 @@
-```markdown
+
 # DevTools Demo — учебный сайт для SEO и разработчиков
 
 Небольшой демо‑проект: одна HTML‑страница с намеренно допущенными ошибками и спорными решениями, чтобы тренироваться работать с DevTools в браузере (Console, Elements, Network) и делать обучающие скриншоты.
@@ -64,7 +64,7 @@
    ```bash
    git clone https://github.com/USERNAME/devtools-demo.git
    cd devtools-demo
-   ```
+   
 2. Откройте `index.html` (или `devtools_demo.html`, если вы так назвали файл) двойным кликом в браузере.
 3. Нажмите `F12`, чтобы открыть DevTools, и переходите по вкладкам Console / Elements / Network.
 
